@@ -2,16 +2,19 @@
 
 ## Student Details
 
-- **Full Name:** `<Enter name>`
-- **CCID:** `<Enter ccid>`
+- **Full Name:** Gabe Ang
+- **CCID:** gabe1
 
 ## References and Resources
 
-List any resources used here, or simply put `N/A` if not applicable.
+1. Claude was used to implement the functionality of making a pop up appear, and changing the other UI in order to accomodate for deletion.
+    - Conversation: "How do I make a pop-up appear when I want to delete a city?"
+    - Date: October 9th, 2026
+    - Model: Claude Sonnet 5.5
+    - Link: [Link](https://claude.ai/share/04a7fcd5-28a4-486a-b46c-affbb631d1ed)
 
 ## Verbal Collaboration
 
 | Student Name | CCID      |
 | ------------ | --------- |
-| `student`    | `student` |
-| `<Add more>` | `<CCID>`  |
+| N/A    | N/A |
