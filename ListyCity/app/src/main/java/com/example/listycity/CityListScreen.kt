@@ -16,6 +16,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +27,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.listycity.ui.theme.ListyCityTheme
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun CityListScreen(
     cities: List<City>,
+    onDeleteCity: (City) -> Unit,
     onAddCity: (City) -> Unit,
     onUpdateCity: (City, City) -> Unit,
     modifier: Modifier = Modifier
@@ -41,7 +47,36 @@ fun CityListScreen(
     var editedCityName by remember { mutableStateOf("") }
     var editedProvinceName by remember { mutableStateOf("") }
 
+    // Delete City Functionality
+    var deleteCityMode by remember { mutableStateOf(false) }
+    val cityToDelete = selectedCity
+
     Column(modifier = modifier.fillMaxSize()) {
+        // TODO: Functionality to Delete Cities
+        // TODO: Make Popup appear when you want to delete a city
+        // Citation: https://claude.ai/share/04a7fcd5-28a4-486a-b46c-affbb631d1ed
+        if (cityToDelete != null && deleteCityMode) {
+            AlertDialog(
+                onDismissRequest = { selectedCity = null },
+                title = { Text("Delete city?") },
+                text = { Text("Delete ${cityToDelete.name}, ${cityToDelete.province}?") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        onDeleteCity(cityToDelete)
+                        selectedCity = null
+                        deleteCityMode = false
+                    }) {
+                        Text("DELETE")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { selectedCity = null }) {
+                        Text("CANCEL")
+                    }
+                }
+            )
+        }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
@@ -155,23 +190,42 @@ fun CityListScreen(
                 }
             }
         }
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
             itemsIndexed(cities) { index, city ->
                 CityRow(
                     city = city,
                     onClick = {
-                        showAddCityFields = false
-                        newCityName = ""
-                        newProvinceName = ""
-                        selectedCity = city
-                        editedCityName = city.name
-                        editedProvinceName = city.province
+                        if (deleteCityMode) {
+                            selectedCity = city
+                        } else {
+                            showAddCityFields = false
+                            newCityName = ""
+                            newProvinceName = ""
+                            selectedCity = city
+                            editedCityName = city.name
+                            editedProvinceName = city.province
+                        }
                     }
                 )
                 if (index < cities.lastIndex) {
                     HorizontalDivider()
                 }
             }
+        }
+
+        // TODO: Button to delete cities
+        Button(
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+            onClick = {
+                deleteCityMode = !deleteCityMode
+                selectedCity = null
+            }
+        ) {
+            val deleteText = if (!deleteCityMode) "DELETE CITY" else "CANCEL DELETE"
+            Text(deleteText)
         }
     }
 }
@@ -213,7 +267,8 @@ fun CityListScreenPreview() {
                 City("Calgary", "AB")
             ),
             onAddCity = {},
-            onUpdateCity = { _, _ -> }
+            onUpdateCity = { _, _ -> },
+            onDeleteCity = {}
         )
     }
 }
