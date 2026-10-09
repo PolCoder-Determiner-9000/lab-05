@@ -21,6 +21,7 @@ class CityRepository {
     }
 
     fun updateCity(oldCity: City, updatedCity: City) {
+
         citiesRef.document(oldCity.name).set(updatedCity)
     }
 

@@ -54,7 +54,7 @@ fun CityListScreen(
     Column(modifier = modifier.fillMaxSize()) {
         // TODO: Functionality to Delete Cities
         // TODO: Make Popup appear when you want to delete a city
-        // Citation: https://claude.ai/share/04a7fcd5-28a4-486a-b46c-affbb631d1ed
+        // see Citation [1]
         if (cityToDelete != null && deleteCityMode) {
             AlertDialog(
                 onDismissRequest = { selectedCity = null },
